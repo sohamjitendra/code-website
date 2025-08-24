@@ -15,3 +15,10 @@ while True:
     else:
         print("Too high! Try again.")
         print("TRY AGAIN !")
+        print("TRY AGAIN !")
+        print("TRY AGAIN !")
+        print("TRY AGAIN !")
+        print("TRY AGAIN !")
+        print("TRY AGAIN !")
+        print("TRY AGAIN !")
+        print("TRY AGAIN !")
