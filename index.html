@@ -6,6 +6,17 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <nav class="navbar">
+  <div class="logo">MyWebsite</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</nav>
+
   <div class="container">
     <h1>Flask + HTML + CSS + JS Demo</h1>
     <input type="text" id="nameInput" placeholder="Enter your name">
