@@ -1,26 +1,16 @@
-import random
+from flask import Flask, render_template, request, jsonify
 
-# Generate a random number between 1 and 10
-secret = random.randint(1, 10)
+app = Flask(__name__)
 
-print("Guess the number between 1 and 10!")
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-while True:
-    guess = int(input("Enter your guess: "))
-    if guess == secret:
-        print("🎉 Correct! You guessed it.")
-        break
-    elif guess < secret:
-        print("Too low! Try again.")
-    else:
-        print("Too high! Try again.")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
-        print("TRY AGAIN !")
+@app.route("/greet", methods=["POST"])
+def greet():
+    data = request.get_json()
+    name = data.get("name", "Guest")
+    return jsonify({"message": f"Hello, {name}! Welcome to Flask + JS demo 🚀"})
+
+if __name__ == "__main__":
+    app.run(debug=True)
