@@ -32,3 +32,20 @@
   font-size: 18px;
   transition: 0.3s;
 }
+
+
+
+.nav-links a:hover {
+  color: #1abc9c;
+}
+
+/* Mobile menu */
+.menu-icon {
+  display: none;
+  font-size: 28px;
+  color: white;
+  cursor: pointer;
+}
+
+
+
