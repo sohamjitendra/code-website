@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transformer - Home</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 50px 20px;
+        color: #f0f0f0;
+        background: linear-gradient(145deg, #1f1f2e, #2b2b3d);
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #fff;
+        text-shadow: 2px 2px 15px rgba(0,0,0,0.5);
+    }
+
+    p {
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        color: #d0d0d0;
+    }
+
+    .navbar {
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.05);
+        padding: 15px 30px;
+        border-radius: 15px;
+        display: inline-block;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        position: relative;
+    }
+
+    nav a {
+        display: inline-block;
+        padding: 12px 25px;
+        margin: 0 12px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #f0f0f0;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 12px;
+        transition: all 0.4s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        backdrop-filter: blur(5px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    nav a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px) scale(1.05);
+        color: #ffffff;
+        box-shadow: 0 6px 20px rgba(255,255,255,0.2);
+    }
+
+    /* Ripple Effect */
+    nav a::after {
+        content: '';
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: rgba(255,255,255,0.25);
+        display: block;
+        border-radius: 50%;
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(0);
+        transition: transform 0.5s, opacity 1s;
+    }
+
+    nav a.ripple::after {
+        transform: scale(4);
+        opacity: 1;
+        transition: transform 0.5s, opacity 1s;
+    }
+
+    /* Particle Background */
+    #particles {
+        position: fixed;
+        top:0; left:0;
+        width:100%; height:100%;
+        z-index:-1;
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size:2.5rem; }
+        p { font-size:1rem; margin-bottom:30px; }
+        nav a { padding: 10px 18px; margin: 0 8px; }
+    }
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+
+<h1>Welcome to Transformer</h1>
+    <p>Fastest way to convert your images!</p>
+
+<div class="navbar">
+    <nav>
+        <a href="/">Home</a>
+        <a href="/convert">Convert</a>
+        <a href="/size">Resize</a>
+    </nav>
+</div>
+
+<script>
+    // Ripple effect on nav links
+    const links = document.querySelectorAll('nav a');
+    links.forEach(link => {
+        link.addEventListener('click', e => {
+            link.classList.add('ripple');
+            setTimeout(() => link.classList.remove('ripple'), 600);
+        });
+    });
+
+    // Particle background
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 100;
+
+    class Particle {
+        constructor() {
+            this.x = Math.random()*width;
+            this.y = Math.random()*height;
+            this.size = Math.random()*2 + 1;
+            this.speedX = (Math.random()-0.5) * 0.8;
+            this.speedY = (Math.random()-0.5) * 0.8;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if(this.x<0 || this.x>width) this.speedX *= -1;
+            if(this.y<0 || this.y>height) this.speedY *= -1;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.beginPath();
+            ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles(){
+        for(let i=0;i<particleCount;i++){
+            particles.push(new Particle());
+        }
+    }
+
+    function animate(){
+        ctx.clearRect(0,0,width,height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    initParticles();
+    animate();
+</script>
+</body>
+</html>

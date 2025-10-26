@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformer - Convert</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color:  #1e1e2f;
+            color: #f0f0f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .navbar {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .navbar nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            background-color: #4fc3f7;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .navbar nav a:hover {
+            background-color: #0298cf;
+        }
+        h1 {
+            text-align: center;
+            color: #4fc3f7;
+            margin: 20px 0;
+            font-size: 2.5em;
+        }
+        hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #4fc3f7, transparent);
+            margin: 0 40px;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #282c3a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .left-side, .right-side {
+            flex: 1;
+            padding: 40px;
+        }
+        .vertical-line {
+            width: 2px;
+            background: linear-gradient(to bottom, #4fc3f7, #81d4fa);
+            margin: 0 20px;
+        }
+        #upload-area {
+            border: 3px dashed #4fc3f7;
+            border-radius: 12px;
+            padding: 60px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #2a2a2a;
+        }
+        #upload-area:hover {
+            border-color: #81d4fa;
+            background-color: #333333;
+        }
+        #upload-area p {
+            font-size: 1.2em;
+            color: #b0bec5;
+            margin: 0;
+        }
+        #preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .preview-thumbnail {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .select-box {
+            margin: 30px 0;
+        }
+        .select-box label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #4fc3f7;
+        }
+        .select-box select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4fc3f7;
+            border-radius: 8px;
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+        #convert-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4fc3f7, #0298cf);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        #convert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.4);
+        }
+        .right-side h3 {
+            text-align: center;
+            color: #b0bec5;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        .converted-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            border: 1px solid #4fc3f7;
+        }
+        .converted-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+        .download-link {
+            display: block;
+            margin-top: 10px;
+            padding: 10px;
+            background: #4fc3f7;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .download-link:hover {
+            background: #0298cf;
+        }
+        .filename {
+            text-align: center;
+            font-weight: bold;
+            color: #4fc3f7;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/convert">Convert</a>
+            <a href="/size">Resize</a>
+        </nav>
+    </div>
+
+    <h1>Image Converter</h1>
+
+    <div class="container">
+        <section class="left-side">
+            <!-- Clickable upload area -->
+            <div id="upload-area">
+                <p>Click here to upload images (multiple supported)</p>
+                <div id="preview-container"></div>
+            </div>
+
+            <!-- Hidden input -->
+            <form id="convert-form" action="/convert" method="post" enctype="multipart/form-data">
+                <input type="file" id="image-input" name="images" multiple accept="image/*" hidden>
+
+                <div class="select-box">
+                    <label>Choose Conversion Type:</label>
+                    <select name="convert_type" id="convert-type" required>
+                        <option value="">--Select--</option>
+                        <option value="jpg_to_png">JPG ➜ PNG</option>
+                        <option value="png_to_jpg">PNG ➜ JPG</option>
+                        <option value="images_to_pdf">images ➜ PDF</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="convert-btn">Convert</button>
+            </form>
+        </section>
+
+        <div class="vertical-line"></div>
+
+        <section class="right-side">
+            {% if previews %}
+                <h3>Converted Files</h3>
+                {% for file in previews %}
+                    <div class="converted-item">
+                        <div class="filename">{{ file.download_name }}</div>
+                        {% if file.preview %}
+                            <img src="{{ file.preview }}" class="converted-preview" alt="Preview">
+                        {% else %}
+                            <p style="text-align: center; color: #b0bec5;">PDF Preview Not Available</p>
+                        {% endif %}
+                        <a class="download-link" download="{{ file.download_name }}" href="data:{{ file.mime_type }};base64,{{ file.file_data | safe | hex_to_base64 }}">Download</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h3>Results</h3>
+                <p>No files converted yet.</p>
+            {% endif %}
+        </section>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('image-input');
+        const previewContainer = document.getElementById('preview-container');
+        const form = document.getElementById('convert-form');
+
+        // When area clicked → open file manager
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Show previews when user selects files
+        fileInput.addEventListener('change', () => {
+            previewContainer.innerHTML = '';
+            uploadArea.querySelector('p').style.display = 'none';
+
+            Array.from(fileInput.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-thumbnail';
+                    img.alt = file.name;
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // Prevent empty submission
+        form.addEventListener('submit', e => {
+            if (!fileInput.files.length || !document.getElementById('convert-type').value) {
+                e.preventDefault();
+                alert("Please select images and a conversion type!");
+            }
+        });
+    </script>
+</body>
+</html>
